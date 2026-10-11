@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      SESSION_SECRET: ci-only-session-secret-not-for-deployment-32-bytes
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for committed secret-shaped values
+        shell: bash
+        run: |
+          if rg -n --hidden \
+            -g '!.git/**' \
+            -g '!node_modules/**' \
+            -g '!.next/**' \
+            -g '!.env.example' \
+            -g '!package-lock.json' \
+            '(BEGIN (RSA|EC|OPENSSH|PRIVATE) KEY|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]+|SESSION_SECRET=[A-Za-z0-9_./+=-]{32,})' .; then
+            echo "Secret-shaped value found in the repository"
+            exit 1
+          fi
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Build
+        run: npm run build

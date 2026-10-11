@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+:root {
+  --northline-background: #101214;
+  --northline-surface: #191d21;
+  --northline-surface-raised: #22282d;
+  --northline-text: #f2f4f1;
+  --northline-text-muted: #9ca6aa;
+  --northline-accent: #c7f36b;
+  --northline-accent-soft: #27341a;
+  --northline-border: #30383d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--northline-background);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+  background: var(--northline-background);
+  color: var(--northline-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--northline-accent);
+  color: var(--northline-background);
+}
+
+img {
+  outline: 1px solid rgb(255 255 255 / 0.08);
+  outline-offset: -1px;
+}
+
+.onboarding-enter {
+  animation: northline-onboarding-enter 650ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes northline-onboarding-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--northline-accent);
+  outline-offset: 3px;
+}
+
+button,
+[role="button"] {
+  transition: transform 160ms ease-out, background-color 160ms ease-out,
+    border-color 160ms ease-out, color 160ms ease-out;
+}
+
+button:active,
+[role="button"]:active {
+  transform: scale(0.98);
+}
+
+@layer utilities {
+  .min-h-screen-safe {
+    min-height: 100dvh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  button:active,
+  [role="button"]:active {
+    transform: none;
+  }
+
+  .onboarding-enter {
+    animation: northline-onboarding-fade 180ms ease-out both;
+  }
+}
+
+@keyframes northline-onboarding-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,25 @@
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Local configuration and runtime data.
+.env*
+!.env.example
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+*.log
+
+# Local editor and agent state.
+.git-public/
+.agents/
+.codex/
+.impeccable/
+AGENTS.md
+CLAUDE.md
+.vscode/
+.idea/
+.DS_Store
+.impeccable/review/
